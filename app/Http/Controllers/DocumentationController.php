@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DocumentationPdfService;
 use App\Services\OpenApiService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DocumentationController extends Controller
 {
@@ -23,10 +26,11 @@ class DocumentationController extends Controller
         return response()->json($openApiService->document());
     }
 
-    public function pdf(): JsonResponse
+    public function pdf(OpenApiService $openApiService, DocumentationPdfService $documentationPdfService): Response
     {
-        return response()->json([
-            'message' => 'Dynamic PDF documentation will be implemented in the PDF step.',
-        ], 501);
+        $pdf = Pdf::loadView('pdf.api-documentation', $documentationPdfService->buildViewData($openApiService->document()))
+            ->setPaper('a4');
+
+        return $pdf->download('webte2-api-documentation.pdf');
     }
 }

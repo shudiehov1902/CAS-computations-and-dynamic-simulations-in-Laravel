@@ -286,7 +286,7 @@ class OpenApiService
                 'get' => [
                     'tags' => ['Documentation'],
                     'summary' => 'Download dynamic API documentation PDF',
-                    'description' => 'Planned dynamic PDF endpoint implemented in the PDF documentation step.',
+                    'description' => 'Generates API documentation dynamically from the current OpenAPI source.',
                     'security' => [['ApiKeyAuth' => []]],
                     'responses' => [
                         '200' => [
@@ -301,7 +301,6 @@ class OpenApiService
                             ],
                         ],
                         '401' => ['$ref' => '#/components/responses/Unauthorized'],
-                        '501' => $this->messageResponse('Dynamic PDF documentation will be implemented in the PDF step.'),
                     ],
                 ],
             ],
