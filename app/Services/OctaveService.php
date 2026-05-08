@@ -76,6 +76,65 @@ class OctaveService
         }
     }
 
+    /**
+     * Run a generated Octave script that does not need CAS session persistence.
+     *
+     * @return array{output: string}
+     */
+    public function executeScript(string $script): array
+    {
+        $temporaryDirectory = storage_path('app/private/octave_temp');
+
+        File::ensureDirectoryExists($temporaryDirectory);
+
+        $scriptFile = tempnam($temporaryDirectory, 'simulation_');
+
+        if ($scriptFile === false) {
+            throw new OctaveExecutionException('Unable to create temporary Octave script.', 500);
+        }
+
+        try {
+            File::put($scriptFile, $script);
+
+            $process = new Process([
+                (string) config('cas.octave_path'),
+                '--quiet',
+                '--no-gui',
+                '--no-window-system',
+                $scriptFile,
+            ]);
+
+            $process->setTimeout((int) config('cas.octave_timeout_seconds', 10));
+            $process->run();
+
+            $output = trim($process->getOutput());
+            $errorOutput = trim($process->getErrorOutput());
+
+            if (! $process->isSuccessful()) {
+                throw new OctaveExecutionException(
+                    $errorOutput !== '' ? $errorOutput : 'Octave script failed.',
+                    422,
+                    $output
+                );
+            }
+
+            return [
+                'output' => $output,
+            ];
+        } catch (ProcessTimedOutException) {
+            throw new OctaveExecutionException('Octave execution timed out.', 504);
+        } catch (OctaveExecutionException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw new OctaveExecutionException(
+                'Unable to start or complete Octave execution: '.$exception->getMessage(),
+                500
+            );
+        } finally {
+            $this->deleteTemporaryFile($scriptFile);
+        }
+    }
+
     public function sessionFilePath(string $userToken): string
     {
         $safeToken = preg_replace('/[^A-Za-z0-9-]/', '', $userToken) ?: 'anonymous';

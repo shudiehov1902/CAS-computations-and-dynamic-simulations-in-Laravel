@@ -46,6 +46,20 @@ if ($mode === 'sleep') {
     exit(0);
 }
 
+if ($mode === 'pendulum') {
+    echo "__WEBTE2_PENDULUM_JSON_START__\n";
+    echo '{"time":[0,0.05,0.1],"position":[0,0.01,0.02],"angle":[0,-0.001,-0.002]}'."\n";
+    echo "__WEBTE2_PENDULUM_JSON_END__\n";
+    exit(0);
+}
+
+if ($mode === 'pendulum-malformed') {
+    echo "__WEBTE2_PENDULUM_JSON_START__\n";
+    echo '{"time":[0],"position":'."\n";
+    echo "__WEBTE2_PENDULUM_JSON_END__\n";
+    exit(0);
+}
+
 if ($mode === 'fail') {
     fwrite(STDERR, "fake octave error\n");
     exit(1);
