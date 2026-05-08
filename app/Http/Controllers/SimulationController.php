@@ -6,6 +6,7 @@ use App\Models\CasLog;
 use App\Services\BallBeamService;
 use App\Services\OctaveExecutionException;
 use App\Services\PendulumService;
+use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,8 +14,11 @@ use Throwable;
 
 class SimulationController extends Controller
 {
-    public function pendulum(Request $request, PendulumService $pendulumService): JsonResponse
-    {
+    public function pendulum(
+        Request $request,
+        PendulumService $pendulumService,
+        StatisticsService $statisticsService
+    ): JsonResponse {
         $payload = $request->all();
         $userToken = (string) $request->attributes->get('user_token', 'anonymous');
 
@@ -47,6 +51,7 @@ class SimulationController extends Controller
             $output = json_encode($result, JSON_THROW_ON_ERROR);
 
             $this->logSimulation($request, 'simulation.pendulum', $parameters, 'success', $output, null, $userToken);
+            $statisticsService->recordUsage(StatisticsService::TYPE_PENDULUM, $userToken, $request->ip());
 
             return response()->json($result);
         } catch (OctaveExecutionException $exception) {
@@ -74,8 +79,11 @@ class SimulationController extends Controller
         }
     }
 
-    public function ballBeam(Request $request, BallBeamService $ballBeamService): JsonResponse
-    {
+    public function ballBeam(
+        Request $request,
+        BallBeamService $ballBeamService,
+        StatisticsService $statisticsService
+    ): JsonResponse {
         $payload = $request->all();
         $userToken = (string) $request->attributes->get('user_token', 'anonymous');
 
@@ -108,6 +116,7 @@ class SimulationController extends Controller
             $output = json_encode($result, JSON_THROW_ON_ERROR);
 
             $this->logSimulation($request, 'simulation.ball_beam', $parameters, 'success', $output, null, $userToken);
+            $statisticsService->recordUsage(StatisticsService::TYPE_BALL_BEAM, $userToken, $request->ip());
 
             return response()->json($result);
         } catch (OctaveExecutionException $exception) {
