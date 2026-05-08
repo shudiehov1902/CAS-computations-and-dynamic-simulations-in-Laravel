@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CasLog;
+use App\Services\BallBeamService;
 use App\Services\OctaveExecutionException;
 use App\Services\PendulumService;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +29,7 @@ class SimulationController extends Controller
         if ($validator->fails()) {
             $error = $validator->errors()->first() ?: 'Invalid pendulum simulation parameters.';
 
-            $this->logSimulation($request, $payload, 'error', '', $error, $userToken);
+            $this->logSimulation($request, 'simulation.pendulum', $payload, 'error', '', $error, $userToken);
 
             return $this->errorResponse($error, 422);
         }
@@ -45,12 +46,13 @@ class SimulationController extends Controller
             $result = $pendulumService->simulate($parameters);
             $output = json_encode($result, JSON_THROW_ON_ERROR);
 
-            $this->logSimulation($request, $parameters, 'success', $output, null, $userToken);
+            $this->logSimulation($request, 'simulation.pendulum', $parameters, 'success', $output, null, $userToken);
 
             return response()->json($result);
         } catch (OctaveExecutionException $exception) {
             $this->logSimulation(
                 $request,
+                'simulation.pendulum',
                 $parameters,
                 'error',
                 $exception->output(),
@@ -66,21 +68,76 @@ class SimulationController extends Controller
         } catch (Throwable $exception) {
             $error = 'Unexpected pendulum simulation error.';
 
-            $this->logSimulation($request, $parameters, 'error', '', $exception->getMessage(), $userToken);
+            $this->logSimulation($request, 'simulation.pendulum', $parameters, 'error', '', $exception->getMessage(), $userToken);
 
             return $this->errorResponse($error, 500);
         }
     }
 
-    public function ballBeam(): JsonResponse
+    public function ballBeam(Request $request, BallBeamService $ballBeamService): JsonResponse
     {
-        return response()->json([
-            'message' => 'Ball and beam simulation will be implemented in its backend step.',
-        ], 501);
+        $payload = $request->all();
+        $userToken = (string) $request->attributes->get('user_token', 'anonymous');
+
+        $validator = Validator::make($payload, [
+            'reference' => ['sometimes', 'numeric', 'min:-2', 'max:2'],
+            'initial_velocity' => ['sometimes', 'numeric', 'min:-5', 'max:5'],
+            'initial_acceleration' => ['sometimes', 'numeric', 'min:-5', 'max:5'],
+            'time_step' => ['sometimes', 'numeric', 'min:0.001', 'max:1'],
+            'duration' => ['sometimes', 'numeric', 'min:0.1', 'max:60'],
+        ]);
+
+        if ($validator->fails()) {
+            $error = $validator->errors()->first() ?: 'Invalid ball and beam simulation parameters.';
+
+            $this->logSimulation($request, 'simulation.ball_beam', $payload, 'error', '', $error, $userToken);
+
+            return $this->errorResponse($error, 422);
+        }
+
+        $parameters = [
+            'reference' => (float) ($payload['reference'] ?? 0.25),
+            'initial_velocity' => (float) ($payload['initial_velocity'] ?? 0),
+            'initial_acceleration' => (float) ($payload['initial_acceleration'] ?? 0),
+            'time_step' => (float) ($payload['time_step'] ?? 0.01),
+            'duration' => (float) ($payload['duration'] ?? 5),
+        ];
+
+        try {
+            $result = $ballBeamService->simulate($parameters);
+            $output = json_encode($result, JSON_THROW_ON_ERROR);
+
+            $this->logSimulation($request, 'simulation.ball_beam', $parameters, 'success', $output, null, $userToken);
+
+            return response()->json($result);
+        } catch (OctaveExecutionException $exception) {
+            $this->logSimulation(
+                $request,
+                'simulation.ball_beam',
+                $parameters,
+                'error',
+                $exception->output(),
+                $exception->getMessage(),
+                $userToken
+            );
+
+            return $this->errorResponse(
+                $exception->getMessage(),
+                $exception->httpStatus(),
+                $exception->output()
+            );
+        } catch (Throwable $exception) {
+            $error = 'Unexpected ball and beam simulation error.';
+
+            $this->logSimulation($request, 'simulation.ball_beam', $parameters, 'error', '', $exception->getMessage(), $userToken);
+
+            return $this->errorResponse($error, 500);
+        }
     }
 
     private function logSimulation(
         Request $request,
+        string $command,
         array $payload,
         string $status,
         ?string $output,
@@ -88,7 +145,7 @@ class SimulationController extends Controller
         string $userToken
     ): void {
         CasLog::create([
-            'command' => 'simulation.pendulum',
+            'command' => $command,
             'request_payload' => $payload,
             'status' => $status,
             'output' => $output,

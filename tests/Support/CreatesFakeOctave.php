@@ -60,6 +60,20 @@ if ($mode === 'pendulum-malformed') {
     exit(0);
 }
 
+if ($mode === 'ball-beam') {
+    echo "__WEBTE2_BALL_BEAM_JSON_START__\n";
+    echo '{"time":[0,0.01,0.02],"ball_position":[0,0.01,0.02],"beam_angle":[0,0.0001,0.00008]}'."\n";
+    echo "__WEBTE2_BALL_BEAM_JSON_END__\n";
+    exit(0);
+}
+
+if ($mode === 'ball-beam-malformed') {
+    echo "__WEBTE2_BALL_BEAM_JSON_START__\n";
+    echo '{"time":[0],"ball_position":'."\n";
+    echo "__WEBTE2_BALL_BEAM_JSON_END__\n";
+    exit(0);
+}
+
 if ($mode === 'fail') {
     fwrite(STDERR, "fake octave error\n");
     exit(1);
