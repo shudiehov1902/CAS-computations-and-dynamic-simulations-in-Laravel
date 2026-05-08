@@ -24,6 +24,7 @@
                     <a href="{{ route('cas-console') }}" @class(['active' => request()->routeIs('cas-console')])>{{ __('messages.nav_cas') }}</a>
                     <a href="{{ route('pendulum') }}" @class(['active' => request()->routeIs('pendulum')])>{{ __('messages.nav_pendulum') }}</a>
                     <a href="{{ route('ball-beam') }}" @class(['active' => request()->routeIs('ball-beam')])>{{ __('messages.nav_ball_beam') }}</a>
+                    <a href="{{ route('logs') }}" @class(['active' => request()->routeIs('logs')])>{{ __('messages.nav_logs') }}</a>
                     <a href="{{ route('statistics') }}" @class(['active' => request()->routeIs('statistics')])>{{ __('messages.nav_statistics') }}</a>
                     <a href="{{ route('api-docs') }}" @class(['active' => request()->routeIs('api-docs')])>{{ __('messages.nav_api_docs') }}</a>
                 </div>

@@ -3,11 +3,14 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\EnsureAnonymousToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class AnonymousTokenMiddlewareTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_web_request_without_cookie_sets_anonymous_user_token(): void
     {
         $response = $this->get('/');
@@ -42,7 +45,7 @@ class AnonymousTokenMiddlewareTest extends TestCase
         $response = $this->withHeader('X-CAS-API-Key', 'test-api-key')
             ->getJson('/api/logs');
 
-        $response->assertStatus(501);
+        $response->assertStatus(200);
         $response->assertCookie(EnsureAnonymousToken::COOKIE_NAME);
 
         $cookie = $response->getCookie(EnsureAnonymousToken::COOKIE_NAME);
@@ -64,7 +67,7 @@ class AnonymousTokenMiddlewareTest extends TestCase
             ->getJson('/api/logs');
 
         $response
-            ->assertStatus(501)
+            ->assertStatus(200)
             ->assertCookie(EnsureAnonymousToken::COOKIE_NAME, $existingToken);
     }
 

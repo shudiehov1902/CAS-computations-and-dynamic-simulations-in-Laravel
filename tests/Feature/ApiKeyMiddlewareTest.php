@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ApiKeyMiddlewareTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_api_request_without_key_is_rejected(): void
     {
         config(['cas.api_key' => 'test-api-key']);
@@ -41,9 +44,15 @@ class ApiKeyMiddlewareTest extends TestCase
             ->getJson('/api/logs');
 
         $response
-            ->assertStatus(501)
-            ->assertJson([
-                'message' => 'CAS logs will be implemented after the database tables are created.',
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data',
+                'meta' => [
+                    'current_page',
+                    'per_page',
+                    'total',
+                    'last_page',
+                ],
             ]);
     }
 
