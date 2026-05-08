@@ -119,30 +119,9 @@
                 margin-top: 10px;
             }
 
-            .footer {
-                bottom: -42px;
-                color: #71717a;
-                font-size: 9px;
-                left: 0;
-                position: fixed;
-                right: 0;
-                text-align: center;
-            }
-
-            .footer .page-number::before {
-                content: counter(page);
-            }
-
-            .footer .page-count::before {
-                content: counter(pages);
-            }
         </style>
     </head>
     <body>
-        <div class="footer">
-            Page <span class="page-number"></span> / <span class="page-count"></span>
-        </div>
-
         <header class="document-header">
             <h1>{{ $info['title'] ?? 'API Documentation' }}</h1>
             <p>{{ $info['description'] ?? '' }}</p>

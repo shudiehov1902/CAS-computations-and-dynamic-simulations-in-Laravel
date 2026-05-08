@@ -31,6 +31,27 @@ class DocumentationController extends Controller
         $pdf = Pdf::loadView('pdf.api-documentation', $documentationPdfService->buildViewData($openApiService->document()))
             ->setPaper('a4');
 
-        return $pdf->download('webte2-api-documentation.pdf');
+        $pdf->render();
+        $this->addPageNumbers($pdf->getDomPDF());
+
+        return response($pdf->output(), 200, [
+            'Content-Disposition' => 'attachment; filename="webte2-api-documentation.pdf"',
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    private function addPageNumbers(\Dompdf\Dompdf $dompdf): void
+    {
+        $canvas = $dompdf->getCanvas();
+        $fontMetrics = $dompdf->getFontMetrics();
+        $font = $fontMetrics->getFont('DejaVu Sans', 'normal');
+        $fontSize = 9;
+        $text = 'Page {PAGE_NUM} / {PAGE_COUNT}';
+        $sampleText = 'Page 99 / 99';
+
+        $x = ($canvas->get_width() - $fontMetrics->getTextWidth($sampleText, $font, $fontSize)) / 2;
+        $y = $canvas->get_height() - 31;
+
+        $canvas->page_text($x, $y, $text, $font, $fontSize, [0.44, 0.44, 0.48]);
     }
 }
