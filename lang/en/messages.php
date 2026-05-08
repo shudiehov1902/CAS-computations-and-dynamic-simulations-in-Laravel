@@ -80,6 +80,6 @@ return [
     'api_docs_title' => 'API Documentation',
     'api_docs_eyebrow' => 'OpenAPI',
     'api_docs_heading' => 'API Documentation',
-    'api_docs_intro' => 'This page will render the OpenAPI documentation and link to the dynamically generated PDF.',
+    'api_docs_intro' => 'Browse the OpenAPI documentation in Swagger UI. External API clients must authorize requests with the X-CAS-API-Key header.',
     'planned_endpoints' => 'Planned endpoints',
 ];

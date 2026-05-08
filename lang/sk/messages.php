@@ -80,6 +80,6 @@ return [
     'api_docs_title' => 'API dokumentácia',
     'api_docs_eyebrow' => 'OpenAPI',
     'api_docs_heading' => 'API dokumentácia',
-    'api_docs_intro' => 'Táto stránka zobrazí OpenAPI dokumentáciu a odkaz na dynamicky generované PDF.',
+    'api_docs_intro' => 'Prehliadajte OpenAPI dokumentáciu vo Swagger UI. Externí API klienti musia autorizovať požiadavky hlavičkou X-CAS-API-Key.',
     'planned_endpoints' => 'Plánované endpointy',
 ];
