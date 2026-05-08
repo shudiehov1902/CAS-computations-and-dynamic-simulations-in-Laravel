@@ -36,6 +36,7 @@ $commandContent = $commandFile && is_file($commandFile) ? file_get_contents($com
 file_put_contents($logPath, json_encode([
     'arguments' => $arguments,
     'wrapper_file' => $wrapperFile,
+    'wrapper_content' => $wrapperContent,
     'session_file' => $sessionFile,
     'command_file' => $commandFile,
     'command_content' => $commandContent,

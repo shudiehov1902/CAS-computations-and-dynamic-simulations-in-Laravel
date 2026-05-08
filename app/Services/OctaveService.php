@@ -169,7 +169,7 @@ function __cas_run__()
   __cas_command_file__ = %s;
 
   if exist(__cas_session_file__, 'file') == 2
-    source(__cas_session_file__);
+    load(__cas_session_file__);
   endif
 
   try

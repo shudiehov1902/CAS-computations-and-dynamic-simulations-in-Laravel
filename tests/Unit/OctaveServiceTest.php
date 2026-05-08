@@ -38,6 +38,8 @@ class OctaveServiceTest extends TestCase
 
         $this->assertSame(['--quiet', '--no-gui', '--no-window-system'], array_slice($fakeLog['arguments'], 0, 3));
         $this->assertSame($result['session_file'], $fakeLog['session_file']);
+        $this->assertStringContainsString('load(__cas_session_file__);', $fakeLog['wrapper_content']);
+        $this->assertStringNotContainsString('source(__cas_session_file__);', $fakeLog['wrapper_content']);
         $this->assertStringContainsString('1 + 1', $fakeLog['command_content']);
     }
 
