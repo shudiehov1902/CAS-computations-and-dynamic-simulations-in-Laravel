@@ -25,6 +25,10 @@ return [
 
     'octave_path' => env('OCTAVE_PATH', 'octave'),
 
+    'octave_timeout_seconds' => (int) env('OCTAVE_TIMEOUT_SECONDS', 10),
+
+    'octave_session_directory' => storage_path('app/private/octave_sessions'),
+
     /*
     |--------------------------------------------------------------------------
     | Simulation Delay
