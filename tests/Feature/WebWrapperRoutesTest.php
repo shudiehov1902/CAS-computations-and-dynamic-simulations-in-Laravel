@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\AnimationUsage;
 use App\Models\CasLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\Support\CreatesFakeOctave;
 use Tests\TestCase;
 
@@ -20,7 +21,7 @@ class WebWrapperRoutesTest extends TestCase
             'cas.octave_path' => $this->createFakeOctaveExecutable('success'),
         ]);
 
-        $response = $this->postJson('/cas-console/execute', [
+        $response = $this->postJsonWithCsrf('/cas-console/execute', [
             'command' => '1 + 1',
         ]);
 
@@ -46,7 +47,7 @@ class WebWrapperRoutesTest extends TestCase
             'cas.octave_path' => $this->createFakeOctaveExecutable('pendulum'),
         ]);
 
-        $response = $this->postJson('/simulations/pendulum/run', [
+        $response = $this->postJsonWithCsrf('/simulations/pendulum/run', [
             'reference' => 0.2,
             'initial_position' => 0,
             'initial_angle' => 0,
@@ -76,7 +77,7 @@ class WebWrapperRoutesTest extends TestCase
             'cas.octave_path' => $this->createFakeOctaveExecutable('ball-beam'),
         ]);
 
-        $response = $this->postJson('/simulations/ball-beam/run', [
+        $response = $this->postJsonWithCsrf('/simulations/ball-beam/run', [
             'reference' => 0.25,
             'initial_velocity' => 0,
             'initial_acceleration' => 0,
@@ -106,7 +107,7 @@ class WebWrapperRoutesTest extends TestCase
             'cas.octave_path' => $this->createFakeOctaveExecutable('success'),
         ]);
 
-        $response = $this->postJson('/cas-console/execute', [
+        $response = $this->postJsonWithCsrf('/cas-console/execute', [
             'command' => 'system("ls")',
         ]);
 
@@ -125,5 +126,18 @@ class WebWrapperRoutesTest extends TestCase
         ]);
         $this->assertDatabaseCount('animation_usages', 0);
         $this->assertSame(1, CasLog::query()->count());
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function postJsonWithCsrf(string $uri, array $payload): TestResponse
+    {
+        $token = 'test-csrf-token';
+
+        return $this
+            ->withSession(['_token' => $token])
+            ->withHeader('X-CSRF-TOKEN', $token)
+            ->postJson($uri, $payload);
     }
 }

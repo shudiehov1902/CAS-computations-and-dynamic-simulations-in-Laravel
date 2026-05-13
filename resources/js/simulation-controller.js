@@ -50,16 +50,23 @@ export function createSimulationController(config) {
         status.textContent = root.dataset.loadingText;
 
         try {
-            const response = await fetch(root.dataset.endpoint, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                body: JSON.stringify(collectPayload()),
-            });
+            let response;
+
+            try {
+                response = await fetch(root.dataset.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify(collectPayload()),
+                });
+            } catch (error) {
+                throw new Error(root.dataset.networkError);
+            }
+
             const payload = await parseJson(response);
 
             if (!response.ok) {

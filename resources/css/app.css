@@ -231,7 +231,7 @@
     }
 
     .data-table {
-        @apply min-w-full divide-y divide-zinc-200 text-left text-sm;
+        @apply min-w-[960px] divide-y divide-zinc-200 text-left text-sm;
     }
 
     .data-table th {
@@ -244,6 +244,14 @@
 
     .data-table code {
         @apply whitespace-pre-wrap break-words rounded bg-zinc-100 px-1.5 py-1 text-xs text-zinc-900;
+    }
+
+    .data-table code.long-code {
+        @apply block max-h-24 max-w-80 overflow-auto;
+    }
+
+    .data-table code.token-code {
+        @apply inline-block whitespace-nowrap;
     }
 
     .status-badge {
@@ -283,11 +291,11 @@
     }
 
     .stat-card {
-        @apply rounded-lg border border-zinc-200 bg-white p-5 shadow-sm hover:border-emerald-300 hover:bg-emerald-50;
+        @apply rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50;
     }
 
     .stat-card.active {
-        @apply border-emerald-700 bg-emerald-50;
+        @apply border-emerald-700 bg-emerald-50 ring-2 ring-emerald-100;
     }
 
     .stat-card span {
@@ -307,11 +315,11 @@
     }
 
     .swagger-panel {
-        @apply mt-8 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm;
+        @apply mt-8 overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm;
     }
 
     .swagger-panel #swagger-ui {
-        @apply min-h-96;
+        @apply min-h-96 min-w-[720px];
     }
 
     .swagger-panel .swagger-ui .topbar {
@@ -320,5 +328,33 @@
 
     .swagger-panel .swagger-ui .info {
         @apply mx-0 p-5;
+    }
+
+    .swagger-panel .swagger-ui .wrapper {
+        @apply max-w-none px-4;
+    }
+
+    @media (max-width: 767px) {
+        .page-shell {
+            @apply py-6;
+        }
+
+        .hero h1,
+        .page-heading h1 {
+            @apply text-3xl;
+        }
+
+        .hero p:not(.eyebrow),
+        .page-heading p:not(.eyebrow) {
+            @apply text-base;
+        }
+
+        .chart-frame {
+            @apply h-72 p-2;
+        }
+
+        .swagger-panel #swagger-ui {
+            @apply min-w-[620px];
+        }
     }
 }

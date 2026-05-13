@@ -51,12 +51,15 @@
                     </thead>
                     <tbody>
                         @foreach ($details as $usage)
+                            @php
+                                $shortToken = strlen($usage->user_token) > 16
+                                    ? substr($usage->user_token, 0, 8) . '-...-' . substr($usage->user_token, -4)
+                                    : $usage->user_token;
+                            @endphp
                             <tr>
                                 <td>{{ $usage->used_at?->format('Y-m-d H:i:s') }}</td>
                                 <td>
-                                    <code title="{{ $usage->user_token }}">
-                                        {{ \Illuminate\Support\Str::limit($usage->user_token, 24) }}
-                                    </code>
+                                    <code class="token-code" title="{{ $usage->user_token }}">{{ $shortToken }}</code>
                                 </td>
                                 <td>{{ $usage->ip_address ?? '-' }}</td>
                                 <td>{{ $usage->city }}</td>

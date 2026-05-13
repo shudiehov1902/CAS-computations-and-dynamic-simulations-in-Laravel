@@ -10,6 +10,7 @@ fi
 mkdir -p \
     bootstrap/cache \
     storage/app/private/octave_sessions \
+    storage/app/private/octave_temp \
     storage/framework/cache/data \
     storage/framework/sessions \
     storage/framework/views \

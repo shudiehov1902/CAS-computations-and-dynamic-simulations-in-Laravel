@@ -35,6 +35,9 @@
                                     : json_encode($log->request_payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                                 $output = (string) ($log->output ?? '');
                                 $error = (string) ($log->error_message ?? '');
+                                $shortToken = $log->user_token && strlen($log->user_token) > 16
+                                    ? substr($log->user_token, 0, 8) . '-...-' . substr($log->user_token, -4)
+                                    : $log->user_token;
                             @endphp
 
                             <tr>
@@ -51,21 +54,21 @@
                                 </td>
                                 <td>
                                     @if ($payload !== '')
-                                        <code title="{{ $payload }}">{{ \Illuminate\Support\Str::limit($payload, 140) }}</code>
+                                        <code class="long-code" title="{{ $payload }}">{{ \Illuminate\Support\Str::limit($payload, 140) }}</code>
                                     @else
                                         -
                                     @endif
                                 </td>
                                 <td>
                                     @if ($output !== '')
-                                        <code title="{{ $output }}">{{ \Illuminate\Support\Str::limit($output, 140) }}</code>
+                                        <code class="long-code" title="{{ $output }}">{{ \Illuminate\Support\Str::limit($output, 140) }}</code>
                                     @else
                                         -
                                     @endif
                                 </td>
                                 <td>
                                     @if ($error !== '')
-                                        <code title="{{ $error }}">{{ \Illuminate\Support\Str::limit($error, 140) }}</code>
+                                        <code class="long-code" title="{{ $error }}">{{ \Illuminate\Support\Str::limit($error, 140) }}</code>
                                     @else
                                         -
                                     @endif
@@ -73,9 +76,7 @@
                                 <td>{{ $log->ip_address ?? '-' }}</td>
                                 <td>
                                     @if ($log->user_token)
-                                        <code title="{{ $log->user_token }}">
-                                            {{ \Illuminate\Support\Str::limit($log->user_token, 18) }}
-                                        </code>
+                                        <code class="token-code" title="{{ $log->user_token }}">{{ $shortToken }}</code>
                                     @else
                                         -
                                     @endif

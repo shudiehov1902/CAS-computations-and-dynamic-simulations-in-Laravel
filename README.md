@@ -1,58 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WEBTE2 CAS Simulations
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Final WEBTE2 project built with Laravel, GNU Octave, Chart.js, Canvas animations, OpenAPI documentation, dynamic PDF export, request logs, CSV export, anonymous animation statistics, and Docker.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Bilingual UI: Slovak and English.
+- Protected REST API for GNU Octave commands through `X-CAS-API-Key`.
+- CSRF-protected browser routes for the frontend, so the API key is never exposed in JavaScript.
+- CAS console with CodeMirror syntax highlighting and per-user variable persistence.
+- Inverted pendulum and ball-and-beam simulations calculated by Octave and rendered with synchronized Chart.js graphs and Canvas animations.
+- CAS and simulation logs with CSV export.
+- Anonymous animation usage statistics with configurable repeat-counting interval.
+- OpenAPI JSON, Swagger UI, and dynamic PDF API documentation.
+- Docker setup with PHP-FPM, Nginx, MariaDB, Node/Vite, GNU Octave, and `octave-control`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Recommended path:
 
-## Learning Laravel
+- Docker
+- Docker Compose
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Local path:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP `^8.4`
+- Composer 2
+- Node.js and npm
+- GNU Octave
+- Octave `control` package
+- MariaDB/MySQL or SQLite
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Setup With Docker
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+docker compose up --build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The app is served at:
 
-## Contributing
+```text
+http://127.0.0.1:8000
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+The Docker entrypoint installs Composer and npm dependencies, builds frontend assets, generates `APP_KEY` when needed, waits for MariaDB, and runs migrations.
 
-## Code of Conduct
+## Local Setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+npm run build
+php artisan serve
+```
 
-## Security Vulnerabilities
+On Windows PowerShell, use `npm.cmd` if script execution blocks `npm.ps1`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Environment
 
-## License
+Important `.env` values:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```dotenv
+CAS_API_KEY=change_me_secret_key
+OCTAVE_PATH=octave
+OCTAVE_TIMEOUT_SECONDS=10
+SIMULATION_DELAY_MS=50
+STATISTICS_INTERVAL_MINUTES=10
+```
+
+Database defaults in Docker:
+
+```dotenv
+DB_CONNECTION=mariadb
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=webte2
+DB_USERNAME=webte2
+DB_PASSWORD=webte2
+```
+
+## Pages
+
+- `/` home
+- `/cas-console` CAS console
+- `/pendulum` inverted pendulum simulation
+- `/ball-beam` ball and beam simulation
+- `/logs` request logs and CSV export
+- `/statistics` animation usage statistics
+- `/api-docs` Swagger UI
+- `/openapi.json` public OpenAPI JSON for Swagger UI
+
+## API
+
+External clients must send:
+
+```http
+X-CAS-API-Key: change_me_secret_key
+```
+
+Protected API endpoints:
+
+- `POST /api/cas/execute`
+- `POST /api/simulations/pendulum`
+- `POST /api/simulations/ball-beam`
+- `GET /api/logs`
+- `GET /api/logs/export`
+- `GET /api/statistics`
+- `GET /api/statistics/{animation}`
+- `GET /api/openapi`
+- `GET /api/docs/pdf`
+
+Browser frontend routes use normal Laravel web middleware and CSRF:
+
+- `POST /cas-console/execute`
+- `POST /simulations/pendulum/run`
+- `POST /simulations/ball-beam/run`
+
+## Database
+
+Main project tables:
+
+- `cas_logs`: command name, request payload, status, output, error, IP address, anonymous user token, timestamps.
+- `animation_usages`: animation type, anonymous user token, IP address, city, country, usage time.
+
+The anonymous user token is stored in the `anonymous_user_token` cookie.
+
+## Division Of Work
+
+- Person 1: Laravel backend, REST API, Octave services, logging, statistics, OpenAPI, dynamic PDF, Docker.
+- Person 2: frontend UI, CAS console, Chart.js graphs, Canvas animations, responsive polish, localization, final documentation.
+
+## Verification
+
+```bash
+php artisan test
+npm run build
+php artisan route:list
+```
+
+Manual smoke tests:
+
+- Switch SK/EN and stay on the same page.
+- Run CAS command `1 + 1`.
+- Run `a = 1 + 1`, then `a + 2` to verify CAS variable persistence.
+- Try a blocked command such as `system("ls")`.
+- Run both simulations.
+- Check Play, Pause, Reset, and speed controls.
+- Confirm graph cursor and Canvas animation move together.
+- Export logs as CSV.
+- Open statistics details.
+- Open Swagger UI, authorize with the API key, and download the dynamic PDF through `/api/docs/pdf`.
+
+## Submission Notes
+
+Generated PDF files and built runtime artifacts should not be committed unless explicitly required by the submission package. The submitted project should include source code, configuration example, Docker files, database migration files, technical documentation, and the demo video.
