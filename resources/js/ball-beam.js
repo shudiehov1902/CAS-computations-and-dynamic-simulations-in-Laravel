@@ -32,7 +32,7 @@ function drawBallBeamFrame(canvas, data, index) {
     const { context, width, height } = prepareCanvas(canvas);
     const ballPosition = data.ball_position[index] ?? 0;
     const beamAngle = data.beam_angle[index] ?? 0;
-    const positionRange = 2;
+    const positionRange = 5;
     const beamLength = width * 0.72;
     const pivotX = width / 2;
     const pivotY = height * 0.58;
