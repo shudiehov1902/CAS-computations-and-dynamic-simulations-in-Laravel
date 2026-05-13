@@ -14,13 +14,13 @@ if (root) {
             {
                 key: 'ball_position',
                 label: root.dataset.ballPositionLabel,
-                color: 'rgb(220, 38, 38)',
+                color: 'rgb(248, 113, 113)',
                 axis: 'y',
             },
             {
                 key: 'beam_angle',
                 label: root.dataset.beamAngleLabel,
-                color: 'rgb(5, 150, 105)',
+                color: 'rgb(52, 211, 153)',
                 axis: 'y1',
             },
         ],
@@ -53,10 +53,19 @@ function drawBallBeamFrame(canvas, data, index) {
     const ballY = pivotY + directionY * alongBeam + normalY * contactOffset;
 
     context.clearRect(0, 0, width, height);
-    context.fillStyle = '#f8fafc';
+    context.fillStyle = '#06100f';
     context.fillRect(0, 0, width, height);
 
-    context.fillStyle = '#e4e4e7';
+    context.strokeStyle = 'rgba(45, 212, 191, 0.09)';
+    context.lineWidth = 1;
+    for (let x = width * 0.08; x <= width * 0.92; x += width * 0.08) {
+        context.beginPath();
+        context.moveTo(x, height * 0.12);
+        context.lineTo(x, height * 0.92);
+        context.stroke();
+    }
+
+    context.fillStyle = 'rgba(212, 212, 216, 0.16)';
     context.beginPath();
     context.moveTo(pivotX, pivotY + 12);
     context.lineTo(pivotX - 42, height * 0.88);
@@ -64,7 +73,7 @@ function drawBallBeamFrame(canvas, data, index) {
     context.closePath();
     context.fill();
 
-    context.strokeStyle = '#0f172a';
+    context.strokeStyle = '#e5e7eb';
     context.lineWidth = beamThickness;
     context.lineCap = 'round';
     context.beginPath();
@@ -72,15 +81,15 @@ function drawBallBeamFrame(canvas, data, index) {
     context.lineTo(endX, endY);
     context.stroke();
 
-    context.strokeStyle = '#94a3b8';
+    context.strokeStyle = 'rgba(34, 211, 238, 0.42)';
     context.lineWidth = 2;
     context.beginPath();
     context.moveTo(startX, startY + 18);
     context.lineTo(endX, endY + 18);
     context.stroke();
 
-    context.fillStyle = '#ecfdf5';
-    context.strokeStyle = '#047857';
+    context.fillStyle = '#052e2b';
+    context.strokeStyle = '#5eead4';
     context.lineWidth = 2;
     context.beginPath();
     context.arc(pivotX, pivotY, 11, 0, Math.PI * 2);
@@ -95,15 +104,16 @@ function drawBallBeamFrame(canvas, data, index) {
         ballY,
         ballRadius,
     );
-    gradient.addColorStop(0, '#fecaca');
-    gradient.addColorStop(1, '#dc2626');
+    gradient.addColorStop(0, '#fee2e2');
+    gradient.addColorStop(0.55, '#ef4444');
+    gradient.addColorStop(1, '#7f1d1d');
 
     context.fillStyle = gradient;
     context.beginPath();
     context.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
     context.fill();
 
-    context.strokeStyle = '#991b1b';
+    context.strokeStyle = '#fecaca';
     context.lineWidth = 2;
     context.stroke();
 }

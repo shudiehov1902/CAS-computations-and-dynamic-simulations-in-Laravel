@@ -14,13 +14,13 @@ if (root) {
             {
                 key: 'position',
                 label: root.dataset.positionLabel,
-                color: 'rgb(5, 150, 105)',
+                color: 'rgb(34, 211, 238)',
                 axis: 'y',
             },
             {
                 key: 'angle',
                 label: root.dataset.angleLabel,
-                color: 'rgb(37, 99, 235)',
+                color: 'rgb(245, 158, 11)',
                 axis: 'y1',
             },
         ],
@@ -46,17 +46,17 @@ function drawPendulumFrame(canvas, data, index) {
     const bobY = pivotY - Math.cos(angle) * rodLength;
 
     context.clearRect(0, 0, width, height);
-    context.fillStyle = '#f8fafc';
+    context.fillStyle = '#06100f';
     context.fillRect(0, 0, width, height);
 
-    context.strokeStyle = '#d4d4d8';
+    context.strokeStyle = 'rgba(34, 211, 238, 0.38)';
     context.lineWidth = 2;
     context.beginPath();
     context.moveTo(width * 0.08, trackY);
     context.lineTo(width * 0.92, trackY);
     context.stroke();
 
-    context.strokeStyle = '#a1a1aa';
+    context.strokeStyle = 'rgba(255, 255, 255, 0.12)';
     context.lineWidth = 1;
     for (let x = width * 0.1; x <= width * 0.9; x += width * 0.08) {
         context.beginPath();
@@ -65,17 +65,17 @@ function drawPendulumFrame(canvas, data, index) {
         context.stroke();
     }
 
-    context.fillStyle = '#0f172a';
+    context.fillStyle = '#e5e7eb';
     roundRect(context, centerX - cartWidth / 2, cartY, cartWidth, cartHeight, 8);
     context.fill();
 
-    context.fillStyle = '#64748b';
+    context.fillStyle = '#22d3ee';
     context.beginPath();
     context.arc(centerX - cartWidth * 0.27, trackY - 6, 8, 0, Math.PI * 2);
     context.arc(centerX + cartWidth * 0.27, trackY - 6, 8, 0, Math.PI * 2);
     context.fill();
 
-    context.strokeStyle = '#059669';
+    context.strokeStyle = '#34d399';
     context.lineWidth = 5;
     context.lineCap = 'round';
     context.beginPath();
@@ -83,13 +83,13 @@ function drawPendulumFrame(canvas, data, index) {
     context.lineTo(bobX, bobY);
     context.stroke();
 
-    context.fillStyle = '#2563eb';
+    context.fillStyle = '#f59e0b';
     context.beginPath();
     context.arc(bobX, bobY, bobRadius, 0, Math.PI * 2);
     context.fill();
 
-    context.fillStyle = '#ecfdf5';
-    context.strokeStyle = '#047857';
+    context.fillStyle = '#052e2b';
+    context.strokeStyle = '#5eead4';
     context.lineWidth = 2;
     context.beginPath();
     context.arc(pivotX, pivotY, 7, 0, Math.PI * 2);

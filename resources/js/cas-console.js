@@ -23,16 +23,25 @@ if (consolePanel) {
                 '&': {
                     minHeight: '14rem',
                     borderRadius: '0.5rem',
-                    border: '1px solid rgb(212 212 216)',
-                    backgroundColor: 'white',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    backgroundColor: 'rgb(10 10 10)',
+                    color: 'rgb(236 253 245)',
                     fontSize: '0.95rem',
                 },
                 '.cm-scroller': {
                     fontFamily: '"Cascadia Mono", "SFMono-Regular", Consolas, monospace',
                 },
+                '.cm-gutters': {
+                    backgroundColor: 'rgb(10 10 10)',
+                    borderRight: '1px solid rgba(255,255,255,0.1)',
+                    color: 'rgb(113 113 122)',
+                },
+                '.cm-activeLine, .cm-activeLineGutter': {
+                    backgroundColor: 'rgba(34, 211, 238, 0.08)',
+                },
                 '&.cm-focused': {
-                    outline: '2px solid rgb(209 250 229)',
-                    borderColor: 'rgb(5 150 105)',
+                    outline: '2px solid rgba(34, 211, 238, 0.22)',
+                    borderColor: 'rgb(103 232 249)',
                 },
             }),
         ],

@@ -14,6 +14,22 @@ Final WEBTE2 project built with Laravel, GNU Octave, Chart.js, Canvas animations
 - OpenAPI JSON, Swagger UI, and dynamic PDF API documentation.
 - Docker setup with PHP-FPM, Nginx, MariaDB, Node/Vite, GNU Octave, and `octave-control`.
 
+## Visual Design
+
+The frontend uses a custom Laravel Blade and Tailwind CSS implementation. The dashboard structure is visually inspired by the TailAdmin community edition, an MIT-licensed Tailwind admin dashboard template:
+
+```text
+https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template
+```
+
+The dark laboratory aesthetic, glow accents, and glass-like control panels are inspired by DarkUI's dark-first Tailwind component style:
+
+```text
+https://darkui.dev/
+```
+
+No TailAdmin or DarkUI source files are bundled directly in this project. The UI was adapted into the existing Blade views and project stylesheet so the application remains lightweight and aligned with the assignment.
+
 ## Requirements
 
 Recommended path:

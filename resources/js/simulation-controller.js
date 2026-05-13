@@ -1,5 +1,11 @@
 import Chart from 'chart.js/auto';
 
+const chartTheme = {
+    grid: 'rgba(255, 255, 255, 0.08)',
+    tick: 'rgb(212, 212, 216)',
+    title: 'rgb(236, 253, 245)',
+};
+
 export function createSimulationController(config) {
     const root = document.querySelector(config.rootSelector);
 
@@ -229,6 +235,7 @@ export function createSimulationController(config) {
                     legend: {
                         position: 'bottom',
                         labels: {
+                            color: chartTheme.tick,
                             filter: (item, data) => !data.datasets[item.datasetIndex].isMarker,
                             boxWidth: 12,
                         },
@@ -237,28 +244,47 @@ export function createSimulationController(config) {
                 scales: {
                     x: {
                         type: 'linear',
+                        grid: {
+                            color: chartTheme.grid,
+                        },
+                        ticks: {
+                            color: chartTheme.tick,
+                        },
                         title: {
                             display: true,
                             text: root.dataset.timeLabel,
+                            color: chartTheme.title,
                         },
                     },
                     y: {
                         type: 'linear',
                         position: 'left',
+                        grid: {
+                            color: chartTheme.grid,
+                        },
+                        ticks: {
+                            color: chartTheme.tick,
+                        },
                         title: {
                             display: true,
                             text: config.series[0].label,
+                            color: chartTheme.title,
                         },
                     },
                     y1: {
                         type: 'linear',
                         position: 'right',
+                        ticks: {
+                            color: chartTheme.tick,
+                        },
                         grid: {
+                            color: chartTheme.grid,
                             drawOnChartArea: false,
                         },
                         title: {
                             display: true,
                             text: config.series[1].label,
+                            color: chartTheme.title,
                         },
                     },
                 },
