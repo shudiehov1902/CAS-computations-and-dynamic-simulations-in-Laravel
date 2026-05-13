@@ -51,9 +51,11 @@
                 <div>
                     <label for="ball-speed-control">{{ __('messages.speed_label') }}</label>
                     <select id="ball-speed-control" data-speed-control>
-                        <option value="0.5">0.5x</option>
-                        <option value="1" selected>1x</option>
-                        <option value="2">2x</option>
+                        <option value="0.1">{{ __('messages.speed_0_1x') }}</option>
+                        <option value="0.25">{{ __('messages.speed_0_25x') }}</option>
+                        <option value="0.5">{{ __('messages.speed_0_5x') }}</option>
+                        <option value="1" selected>{{ __('messages.speed_1x') }}</option>
+                        <option value="2">{{ __('messages.speed_2x') }}</option>
                     </select>
                 </div>
             </div>

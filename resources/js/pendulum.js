@@ -32,7 +32,7 @@ function drawPendulumFrame(canvas, data, index) {
     const { context, width, height } = prepareCanvas(canvas);
     const position = data.position[index] ?? 0;
     const angle = data.angle[index] ?? 0;
-    const range = Math.max(0.4, ...data.position.map((value) => Math.abs(value)));
+    const range = 5;
     const trackY = height * 0.74;
     const centerX = width / 2 + clamp(position / (range * 1.25), -1, 1) * width * 0.36;
     const cartWidth = Math.min(90, width * 0.16);
