@@ -32,7 +32,7 @@ function drawBallBeamFrame(canvas, data, index) {
     const { context, width, height } = prepareCanvas(canvas);
     const ballPosition = data.ball_position[index] ?? 0;
     const beamAngle = data.beam_angle[index] ?? 0;
-    const positionRange = Math.max(0.25, ...data.ball_position.map((value) => Math.abs(value)));
+    const positionRange = 2;
     const beamLength = width * 0.72;
     const pivotX = width / 2;
     const pivotY = height * 0.58;
@@ -40,15 +40,17 @@ function drawBallBeamFrame(canvas, data, index) {
     const directionY = Math.sin(beamAngle);
     const normalX = Math.sin(beamAngle);
     const normalY = -Math.cos(beamAngle);
+    const beamThickness = Math.max(10, height * 0.04);
     const startX = pivotX - directionX * beamLength / 2;
     const startY = pivotY - directionY * beamLength / 2;
     const endX = pivotX + directionX * beamLength / 2;
     const endY = pivotY + directionY * beamLength / 2;
-    const ballRadius = Math.max(12, Math.min(width, height) * 0.045);
-    const normalizedPosition = clamp(ballPosition / (positionRange * 1.2), -1, 1);
-    const alongBeam = normalizedPosition * beamLength * 0.42;
-    const ballX = pivotX + directionX * alongBeam + normalX * (ballRadius + 6);
-    const ballY = pivotY + directionY * alongBeam + normalY * (ballRadius + 6);
+    const ballRadius = clamp(Math.min(width, height) * 0.038, 11, 22);
+    const normalizedPosition = clamp(ballPosition / positionRange, -1, 1);
+    const alongBeam = normalizedPosition * beamLength * 0.46;
+    const contactOffset = beamThickness / 2 + ballRadius - 1;
+    const ballX = pivotX + directionX * alongBeam + normalX * contactOffset;
+    const ballY = pivotY + directionY * alongBeam + normalY * contactOffset;
 
     context.clearRect(0, 0, width, height);
     context.fillStyle = '#f8fafc';
@@ -63,7 +65,7 @@ function drawBallBeamFrame(canvas, data, index) {
     context.fill();
 
     context.strokeStyle = '#0f172a';
-    context.lineWidth = Math.max(10, height * 0.04);
+    context.lineWidth = beamThickness;
     context.lineCap = 'round';
     context.beginPath();
     context.moveTo(startX, startY);

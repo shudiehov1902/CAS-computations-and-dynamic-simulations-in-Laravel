@@ -106,14 +106,14 @@ try
   D = [0];
   K = place(A,B,[-2+2i,-2-2i,-20,-80]);
   N = -inv(C*inv(A-B*K)*B);
-  sys = ss(A-B*K,B,C,D);
+  sys = ss(A-B*K,B*N,C,D);
 
   t = 0:%s:%s;
   r = %s;
   initRychlost = %s;
   initZrychlenie = %s;
 
-  [y,t,x] = lsim(N*sys,r*ones(size(t)),t,[initRychlost;0;initZrychlenie;0]);
+  [y,t,x] = lsim(sys,r*ones(size(t)),t,[initRychlost;0;initZrychlenie;0]);
 
   __webte2_time__ = t(:)';
   __webte2_ball_position__ = y(:)';
