@@ -143,6 +143,22 @@
         @apply mt-8 grid gap-3;
     }
 
+    .cas-console-form {
+        @apply grid gap-3;
+    }
+
+    .editor-shell {
+        @apply overflow-hidden rounded-lg;
+    }
+
+    .form-actions {
+        @apply flex flex-wrap items-center gap-3;
+    }
+
+    .inline-status {
+        @apply text-sm font-medium text-zinc-600;
+    }
+
     .output-panel {
         @apply min-h-32 overflow-auto rounded-md bg-zinc-950 p-4 text-sm text-zinc-100;
     }
