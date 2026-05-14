@@ -20,8 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.url')) {
-            URL::forceRootUrl((string) config('app.url'));
+        $appUrl = (string) config('app.url');
+
+        if ($appUrl !== '') {
+            URL::forceRootUrl($appUrl);
+
+            if ($scheme = parse_url($appUrl, PHP_URL_SCHEME)) {
+                URL::forceScheme($scheme);
+            }
         }
     }
 }
