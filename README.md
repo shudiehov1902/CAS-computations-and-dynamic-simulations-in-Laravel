@@ -95,7 +95,7 @@ CAS_API_KEY=<strong-secret-key>
 OCTAVE_PATH=octave
 ```
 
-If the existing MariaDB server runs on the same host outside Docker, use a host address reachable from containers, for example `DB_HOST=host.docker.internal`, and make sure MariaDB accepts TCP connections from the Docker bridge network.
+On node82 the app container uses host networking so it can reach the existing host MariaDB at `DB_HOST=127.0.0.1`. The Docker Nginx container proxies PHP requests to PHP-FPM through `host.docker.internal:9000`.
 
 Host Nginx should proxy the `/Zav_zadanie` prefix to the Docker Nginx container:
 
