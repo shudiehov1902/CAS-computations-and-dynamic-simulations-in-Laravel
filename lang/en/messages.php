@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'app_name' => 'WEBTE2 CAS Simulations',
+    'app_name' => 'CAS Simulations',
     'main_navigation' => 'Main navigation',
     'toggle_navigation' => 'Toggle navigation',
     'language_switcher' => 'Language switcher',
@@ -13,9 +13,9 @@ return [
     'nav_statistics' => 'Statistics',
     'nav_api_docs' => 'API Documentation',
     'home_title' => 'Home',
-    'home_eyebrow' => 'Final WEBTE2 project',
-    'home_heading' => 'CAS computations and dynamic simulations in Laravel',
-    'home_intro' => 'This application connects Laravel, GNU Octave, Chart.js, Canvas animations, REST API documentation, PDF export, and anonymous usage statistics.',
+    'home_eyebrow' => '',
+    'home_heading' => 'CAS computations and dynamic simulations',
+    'home_intro' => '',
     'open_cas' => 'Open CAS Console',
     'open_simulations' => 'Open Simulations',
     'feature_overview' => 'Feature overview',

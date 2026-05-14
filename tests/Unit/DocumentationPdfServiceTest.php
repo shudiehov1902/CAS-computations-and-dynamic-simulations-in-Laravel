@@ -36,7 +36,7 @@ class DocumentationPdfServiceTest extends TestCase
     {
         $viewData = app(DocumentationPdfService::class)->buildViewData(app(OpenApiService::class)->document());
 
-        $this->assertSame('WEBTE2 CAS Simulations API', $viewData['info']['title']);
+        $this->assertSame('CAS Simulations API', $viewData['info']['title']);
         $this->assertArrayHasKey('ApiKeyAuth', $viewData['securitySchemes']);
         $this->assertNotEmpty($viewData['generatedAt']);
         $this->assertNotEmpty($viewData['groups']);

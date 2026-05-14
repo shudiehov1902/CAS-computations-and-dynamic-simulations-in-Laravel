@@ -12,7 +12,7 @@ class OpenApiService
         return [
             'openapi' => '3.0.3',
             'info' => [
-                'title' => 'WEBTE2 CAS Simulations API',
+                'title' => 'CAS Simulations API',
                 'description' => 'REST API for GNU Octave CAS execution, dynamic simulations, logs, statistics, OpenAPI JSON, and dynamic PDF documentation.',
                 'version' => '1.0.0',
             ],

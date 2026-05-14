@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'app_name' => 'WEBTE2 CAS simulácie',
+    'app_name' => 'CAS simulácie',
     'main_navigation' => 'Hlavná navigácia',
     'toggle_navigation' => 'Prepnúť navigáciu',
     'language_switcher' => 'Prepínač jazyka',
@@ -13,9 +13,9 @@ return [
     'nav_statistics' => 'Štatistiky',
     'nav_api_docs' => 'API dokumentácia',
     'home_title' => 'Domov',
-    'home_eyebrow' => 'Finálne WEBTE2 zadanie',
-    'home_heading' => 'CAS výpočty a dynamické simulácie v Laraveli',
-    'home_intro' => 'Aplikácia prepája Laravel, GNU Octave, Chart.js, Canvas animácie, REST API dokumentáciu, PDF export a anonymné štatistiky používania.',
+    'home_eyebrow' => '',
+    'home_heading' => 'CAS výpočty a dynamické simulácie',
+    'home_intro' => '',
     'open_cas' => 'Otvoriť CAS konzolu',
     'open_simulations' => 'Otvoriť simulácie',
     'feature_overview' => 'Prehľad funkcionality',

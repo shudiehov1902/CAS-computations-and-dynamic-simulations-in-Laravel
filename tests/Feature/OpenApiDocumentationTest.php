@@ -29,7 +29,7 @@ class OpenApiDocumentationTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonPath('openapi', '3.0.3')
-            ->assertJsonPath('info.title', 'WEBTE2 CAS Simulations API')
+            ->assertJsonPath('info.title', 'CAS Simulations API')
             ->assertJsonPath('components.securitySchemes.ApiKeyAuth.name', 'X-CAS-API-Key');
     }
 

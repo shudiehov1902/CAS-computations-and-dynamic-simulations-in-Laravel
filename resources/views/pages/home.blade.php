@@ -3,9 +3,7 @@
 @section('content')
     <section class="hero">
         <div>
-            <p class="eyebrow">{{ __('messages.home_eyebrow') }}</p>
             <h1>{{ __('messages.home_heading') }}</h1>
-            <p>{{ __('messages.home_intro') }}</p>
             <div class="actions">
                 <a class="button primary" href="{{ route('cas-console') }}">{{ __('messages.open_cas') }}</a>
                 <a class="button secondary" href="{{ route('pendulum') }}">{{ __('messages.open_simulations') }}</a>
