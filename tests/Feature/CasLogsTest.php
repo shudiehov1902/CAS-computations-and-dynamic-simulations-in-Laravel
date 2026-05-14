@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Http\Middleware\EnsureAnonymousToken;
 use App\Models\CasLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CasLogsTest extends TestCase
@@ -50,6 +52,27 @@ class CasLogsTest extends TestCase
             ->assertJsonPath('meta.last_page', 1);
     }
 
+    public function test_api_logs_with_valid_key_returns_logs_for_all_users(): void
+    {
+        config(['cas.api_key' => 'test-api-key']);
+
+        $this->createCasLog([
+            'command' => 'cas.execute',
+            'user_token' => (string) Str::uuid(),
+        ]);
+        $this->createCasLog([
+            'command' => 'simulation.pendulum',
+            'user_token' => (string) Str::uuid(),
+        ]);
+
+        $response = $this->withHeader('X-CAS-API-Key', 'test-api-key')
+            ->getJson('/api/logs');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonPath('meta.total', 2);
+    }
+
     public function test_api_logs_are_ordered_newest_first(): void
     {
         config(['cas.api_key' => 'test-api-key']);
@@ -83,6 +106,13 @@ class CasLogsTest extends TestCase
             'status' => 'success',
             'output' => 'ans = 2',
             'ip_address' => '127.0.0.1',
+            'user_token' => 'api-token-one',
+        ]);
+        $this->createCasLog([
+            'command' => 'simulation.pendulum',
+            'status' => 'error',
+            'error_message' => 'api-only error',
+            'user_token' => 'api-token-two',
         ]);
 
         $response = $this->withHeader('X-CAS-API-Key', 'test-api-key')
@@ -95,41 +125,73 @@ class CasLogsTest extends TestCase
 
         $this->assertStringContainsString('id,created_at,command,status,user_token,ip_address,request_payload,output,error_message', $content);
         $this->assertStringContainsString('cas.execute', $content);
+        $this->assertStringContainsString('simulation.pendulum', $content);
         $this->assertStringContainsString('127.0.0.1', $content);
         $this->assertStringContainsString('ans = 2', $content);
+        $this->assertStringContainsString('api-only error', $content);
     }
 
-    public function test_web_logs_page_works_without_api_key(): void
+    public function test_web_logs_page_shows_only_current_anonymous_user_logs(): void
     {
+        $currentToken = (string) Str::uuid();
+        $otherToken = (string) Str::uuid();
+
         $this->createCasLog([
             'command' => 'simulation.pendulum',
             'status' => 'error',
-            'error_message' => 'fake octave error',
+            'error_message' => 'current user octave error',
+            'user_token' => $currentToken,
+        ]);
+        $this->createCasLog([
+            'command' => 'simulation.ball_beam',
+            'status' => 'success',
+            'output' => 'other user hidden output',
+            'user_token' => $otherToken,
         ]);
 
-        $response = $this->get('/logs');
+        $response = $this->withCookie(EnsureAnonymousToken::COOKIE_NAME, $currentToken)
+            ->get('/logs');
 
         $response
             ->assertStatus(200)
             ->assertSee('CAS Logs')
             ->assertSee('simulation.pendulum')
-            ->assertSee('fake octave error')
-            ->assertSee('Export CSV');
+            ->assertSee('current user octave error')
+            ->assertSee('Export CSV')
+            ->assertDontSee('simulation.ball_beam')
+            ->assertDontSee('other user hidden output');
     }
 
-    public function test_web_logs_export_returns_csv(): void
+    public function test_web_logs_export_returns_csv_for_current_anonymous_user_only(): void
     {
+        $currentToken = (string) Str::uuid();
+        $otherToken = (string) Str::uuid();
+
         $this->createCasLog([
             'command' => 'simulation.ball_beam',
             'status' => 'success',
-            'output' => '{"time":[0]}',
+            'output' => 'current user csv output',
+            'user_token' => $currentToken,
+        ]);
+        $this->createCasLog([
+            'command' => 'cas.execute',
+            'status' => 'success',
+            'output' => 'other user csv output',
+            'user_token' => $otherToken,
         ]);
 
-        $response = $this->get('/logs/export');
+        $response = $this->withCookie(EnsureAnonymousToken::COOKIE_NAME, $currentToken)
+            ->get('/logs/export');
 
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
-        $this->assertStringContainsString('simulation.ball_beam', $response->getContent());
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('simulation.ball_beam', $content);
+        $this->assertStringContainsString('current user csv output', $content);
+        $this->assertStringNotContainsString('cas.execute', $content);
+        $this->assertStringNotContainsString('other user csv output', $content);
     }
 
     /**

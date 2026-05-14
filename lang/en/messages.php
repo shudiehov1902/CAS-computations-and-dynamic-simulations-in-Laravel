@@ -79,7 +79,7 @@ return [
     'logs_title' => 'CAS Logs',
     'logs_eyebrow' => 'Request history',
     'logs_heading' => 'CAS Logs',
-    'logs_intro' => 'Review CAS commands and simulation requests that reached the backend, including output, status, IP address, and anonymous user token.',
+    'logs_intro' => 'Review CAS commands and simulation requests from this anonymous browser session. The CSV export contains only the logs visible on this page.',
     'logs_export_csv' => 'Export CSV',
     'logs_empty_title' => 'No logs yet',
     'logs_empty_text' => 'Run a CAS command or simulation to create the first backend log entry.',

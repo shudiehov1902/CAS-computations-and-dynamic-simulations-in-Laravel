@@ -1,6 +1,6 @@
-# WEBTE2 CAS Simulations
+# CAS Simulations
 
-Final WEBTE2 project built with Laravel, GNU Octave, Chart.js, Canvas animations, OpenAPI documentation, dynamic PDF export, request logs, CSV export, anonymous animation statistics, and Docker.
+Laravel project for CAS computations and dynamic simulations with GNU Octave, Chart.js, Canvas animations, OpenAPI documentation, dynamic PDF export, request logs, CSV export, anonymous animation statistics, and Docker.
 
 ## Features
 
@@ -65,7 +65,7 @@ The Docker entrypoint installs Composer and npm dependencies, builds frontend as
 The university deployment target uses the subpath:
 
 ```text
-http://node82.webte.fei.stuba.sk/Zav_zadanie
+https://node82.webte.fei.stuba.sk/Zav_zadanie
 ```
 
 Use the server-specific compose file when deploying behind the host Nginx reverse proxy:
@@ -81,8 +81,8 @@ The production `.env` on the server should include:
 ```dotenv
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=http://node82.webte.fei.stuba.sk/Zav_zadanie
-ASSET_URL=http://node82.webte.fei.stuba.sk/Zav_zadanie
+APP_URL=https://node82.webte.fei.stuba.sk/Zav_zadanie
+ASSET_URL=https://node82.webte.fei.stuba.sk/Zav_zadanie
 
 DB_CONNECTION=mariadb
 DB_HOST=<existing-db-host>

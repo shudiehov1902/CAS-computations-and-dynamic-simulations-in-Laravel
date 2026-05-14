@@ -79,7 +79,7 @@ return [
     'logs_title' => 'CAS logy',
     'logs_eyebrow' => 'História požiadaviek',
     'logs_heading' => 'CAS logy',
-    'logs_intro' => 'Prehľad CAS príkazov a simulačných požiadaviek, ktoré prišli na backend, vrátane výstupu, stavu, IP adresy a anonymného tokenu používateľa.',
+    'logs_intro' => 'Prehľad CAS príkazov a simulačných požiadaviek z tejto anonymnej relácie prehliadača. CSV export obsahuje iba logy zobrazené na tejto stránke.',
     'logs_export_csv' => 'Exportovať CSV',
     'logs_empty_title' => 'Zatiaľ žiadne logy',
     'logs_empty_text' => 'Spustite CAS príkaz alebo simuláciu a vytvorí sa prvý backendový záznam.',

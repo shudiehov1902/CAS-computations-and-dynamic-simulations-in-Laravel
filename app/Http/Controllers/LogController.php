@@ -13,7 +13,7 @@ class LogController extends Controller
 {
     public function page(Request $request): View
     {
-        $logs = $this->baseQuery()
+        $logs = $this->userQuery($request)
             ->paginate($this->perPage($request))
             ->withQueryString();
 
@@ -44,9 +44,9 @@ class LogController extends Controller
         return $this->csvResponse();
     }
 
-    public function webExport(): Response
+    public function webExport(Request $request): Response
     {
-        return $this->csvResponse();
+        return $this->csvResponse($this->userQuery($request));
     }
 
     private function baseQuery(): Builder
@@ -54,6 +54,12 @@ class LogController extends Controller
         return CasLog::query()
             ->orderByDesc('created_at')
             ->orderByDesc('id');
+    }
+
+    private function userQuery(Request $request): Builder
+    {
+        return $this->baseQuery()
+            ->where('user_token', (string) $request->attributes->get('user_token', ''));
     }
 
     private function perPage(Request $request): int
@@ -85,7 +91,7 @@ class LogController extends Controller
         ];
     }
 
-    private function csvResponse(): Response
+    private function csvResponse(?Builder $query = null): Response
     {
         $handle = fopen('php://temp', 'r+');
 
@@ -101,7 +107,7 @@ class LogController extends Controller
             'error_message',
         ]);
 
-        foreach ($this->baseQuery()->cursor() as $log) {
+        foreach (($query ?? $this->baseQuery())->cursor() as $log) {
             fputcsv($handle, [
                 $log->id,
                 $log->created_at?->toDateTimeString() ?? '',
