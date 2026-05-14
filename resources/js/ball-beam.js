@@ -32,7 +32,7 @@ function drawBallBeamFrame(canvas, data, index) {
     const { context, width, height } = prepareCanvas(canvas);
     const ballPosition = data.ball_position[index] ?? 0;
     const beamAngle = data.beam_angle[index] ?? 0;
-    const positionRange = getVisualPositionRange(data);
+    const halfBeamRangeMeters = 0.5;
     const targetPosition = getTargetPosition(data);
     const beamLength = width * 0.72;
     const pivotX = width / 2;
@@ -47,8 +47,8 @@ function drawBallBeamFrame(canvas, data, index) {
     const endX = pivotX + directionX * beamLength / 2;
     const endY = pivotY + directionY * beamLength / 2;
     const ballRadius = clamp(Math.min(width, height) * 0.038, 11, 22);
-    const alongBeam = positionToBeamOffset(ballPosition, positionRange, beamLength);
-    const targetAlongBeam = positionToBeamOffset(targetPosition, positionRange, beamLength);
+    const alongBeam = positionToBeamOffset(ballPosition, halfBeamRangeMeters, beamLength);
+    const targetAlongBeam = positionToBeamOffset(targetPosition, halfBeamRangeMeters, beamLength);
     const contactOffset = beamThickness / 2 + ballRadius - 1;
     const ballX = pivotX + directionX * alongBeam + normalX * contactOffset;
     const ballY = pivotY + directionY * alongBeam + normalY * contactOffset;
@@ -150,14 +150,6 @@ function drawBallBeamFrame(canvas, data, index) {
 
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
-}
-
-function getVisualPositionRange(data) {
-    const maxObservedPosition = data.ball_position.reduce((maximum, value) => (
-        Number.isFinite(value) ? Math.max(maximum, Math.abs(value)) : maximum
-    ), 0);
-
-    return clamp(maxObservedPosition * 1.1, 0.75, 2);
 }
 
 function getTargetPosition(data) {

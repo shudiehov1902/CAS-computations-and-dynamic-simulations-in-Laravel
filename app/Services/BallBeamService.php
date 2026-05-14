@@ -110,10 +110,10 @@ try
 
   t = 0:%s:%s;
   r = %s;
-  initRychlost = %s;
-  initZrychlenie = %s;
+  initPozicia = %s;
+  initUhol = %s;
 
-  [y,t,x] = lsim(sys,r*ones(size(t)),t,[initRychlost;0;initZrychlenie;0]);
+  [y,t,x] = lsim(sys,r*ones(size(t)),t,[initPozicia;0;initUhol;0]);
 
   __webte2_time__ = t(:)';
   __webte2_ball_position__ = y(:)';

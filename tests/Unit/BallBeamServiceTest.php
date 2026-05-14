@@ -86,7 +86,7 @@ OUTPUT);
         $script = $log['wrapper_content'];
 
         $this->assertStringContainsString('sys = ss(A-B*K,B*N,C,D);', $script);
-        $this->assertStringContainsString('[y,t,x] = lsim(sys,r*ones(size(t)),t,[initRychlost;0;initZrychlenie;0]);', $script);
+        $this->assertStringContainsString('[y,t,x] = lsim(sys,r*ones(size(t)),t,[initPozicia;0;initUhol;0]);', $script);
         $this->assertStringNotContainsString('lsim(N*sys', $script);
     }
 }

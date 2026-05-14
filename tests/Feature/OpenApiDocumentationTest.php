@@ -71,6 +71,10 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertArrayHasKey('initial_position', $document['components']['schemas']['PendulumRequest']['properties']);
         $this->assertArrayHasKey('reference', $document['components']['schemas']['BallBeamRequest']['properties']);
         $this->assertArrayHasKey('initial_velocity', $document['components']['schemas']['BallBeamRequest']['properties']);
+        $this->assertSame(-0.5, $document['components']['schemas']['BallBeamRequest']['properties']['reference']['minimum']);
+        $this->assertSame(0.5, $document['components']['schemas']['BallBeamRequest']['properties']['reference']['maximum']);
+        $this->assertSame(-0.35, $document['components']['schemas']['BallBeamRequest']['properties']['initial_acceleration']['minimum']);
+        $this->assertSame(0.35, $document['components']['schemas']['BallBeamRequest']['properties']['initial_acceleration']['maximum']);
         $this->assertArrayHasKey('text/csv', $document['paths']['/api/logs/export']['get']['responses']['200']['content']);
         $this->assertArrayHasKey('application/pdf', $document['paths']['/api/docs/pdf']['get']['responses']['200']['content']);
     }

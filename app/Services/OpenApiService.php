@@ -89,7 +89,7 @@ class OpenApiService
                 'post' => [
                     'tags' => ['Simulations'],
                     'summary' => 'Run inverted pendulum simulation',
-                    'description' => 'Calculates numerical response arrays in GNU Octave. The frontend renders the graph and Canvas animation.',
+                    'description' => 'Calculates numerical response arrays in GNU Octave using the CTMS ball-and-beam model. Ball positions are meters on a 1.0 m beam, and beam angle is radians.',
                     'security' => [['ApiKeyAuth' => []]],
                     'requestBody' => [
                         'required' => false,
@@ -429,9 +429,27 @@ class OpenApiService
             'BallBeamRequest' => [
                 'type' => 'object',
                 'properties' => [
-                    'reference' => ['type' => 'number', 'minimum' => -2, 'maximum' => 2, 'default' => 0.25],
-                    'initial_velocity' => ['type' => 'number', 'minimum' => -5, 'maximum' => 5, 'default' => 0],
-                    'initial_acceleration' => ['type' => 'number', 'minimum' => -5, 'maximum' => 5, 'default' => 0],
+                    'reference' => [
+                        'type' => 'number',
+                        'minimum' => -0.5,
+                        'maximum' => 0.5,
+                        'default' => 0.25,
+                        'description' => 'Target ball position in meters on the 1.0 m CTMS beam.',
+                    ],
+                    'initial_velocity' => [
+                        'type' => 'number',
+                        'minimum' => -0.5,
+                        'maximum' => 0.5,
+                        'default' => 0,
+                        'description' => 'Backward-compatible field name used as initial ball position in meters.',
+                    ],
+                    'initial_acceleration' => [
+                        'type' => 'number',
+                        'minimum' => -0.35,
+                        'maximum' => 0.35,
+                        'default' => 0,
+                        'description' => 'Backward-compatible field name used as initial beam angle in radians.',
+                    ],
                     'time_step' => ['type' => 'number', 'minimum' => 0.001, 'maximum' => 1, 'default' => 0.01],
                     'duration' => ['type' => 'number', 'minimum' => 0.1, 'maximum' => 60, 'default' => 5],
                 ],

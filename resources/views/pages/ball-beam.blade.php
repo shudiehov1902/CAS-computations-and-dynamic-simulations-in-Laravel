@@ -30,15 +30,15 @@
             <div class="control-grid">
                 <div>
                     <label for="ball-reference">{{ __('messages.reference_label') }}</label>
-                    <input id="ball-reference" name="reference" type="number" min="-2" max="2" step="0.01" value="0.25" required>
+                    <input id="ball-reference" name="reference" type="number" min="-0.5" max="0.5" step="0.01" value="0.25" required>
                 </div>
                 <div>
                     <label for="ball-speed">{{ __('messages.initial_velocity_label') }}</label>
-                    <input id="ball-speed" name="initial_velocity" type="number" min="-5" max="5" step="0.01" value="0" required>
+                    <input id="ball-speed" name="initial_velocity" type="number" min="-0.5" max="0.5" step="0.01" value="0" required>
                 </div>
                 <div>
                     <label for="ball-acceleration">{{ __('messages.initial_acceleration_label') }}</label>
-                    <input id="ball-acceleration" name="initial_acceleration" type="number" min="-5" max="5" step="0.01" value="0" required>
+                    <input id="ball-acceleration" name="initial_acceleration" type="number" min="-0.35" max="0.35" step="0.01" value="0" required>
                 </div>
                 <div>
                     <label for="ball-time-step">{{ __('messages.time_step_label') }}</label>

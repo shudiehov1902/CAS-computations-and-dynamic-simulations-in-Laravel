@@ -88,9 +88,9 @@ class SimulationController extends Controller
         $userToken = (string) $request->attributes->get('user_token', 'anonymous');
 
         $validator = Validator::make($payload, [
-            'reference' => ['sometimes', 'numeric', 'min:-2', 'max:2'],
-            'initial_velocity' => ['sometimes', 'numeric', 'min:-5', 'max:5'],
-            'initial_acceleration' => ['sometimes', 'numeric', 'min:-5', 'max:5'],
+            'reference' => ['sometimes', 'numeric', 'min:-0.5', 'max:0.5'],
+            'initial_velocity' => ['sometimes', 'numeric', 'min:-0.5', 'max:0.5'],
+            'initial_acceleration' => ['sometimes', 'numeric', 'min:-0.35', 'max:0.35'],
             'time_step' => ['sometimes', 'numeric', 'min:0.001', 'max:1'],
             'duration' => ['sometimes', 'numeric', 'min:0.1', 'max:60'],
         ]);

@@ -29,7 +29,7 @@ class BallBeamSimulationTest extends TestCase
 
         $response = $this->withHeader('X-CAS-API-Key', 'test-api-key')
             ->postJson('/api/simulations/ball-beam', [
-                'reference' => 99,
+                'reference' => 2,
             ]);
 
         $response
@@ -38,6 +38,25 @@ class BallBeamSimulationTest extends TestCase
                 'success' => false,
                 'output' => '',
             ]);
+
+        $this->assertDatabaseHas('cas_logs', [
+            'command' => 'simulation.ball_beam',
+            'status' => 'error',
+        ]);
+    }
+
+    public function test_physically_invalid_initial_ball_position_and_beam_angle_are_rejected(): void
+    {
+        config(['cas.api_key' => 'test-api-key']);
+
+        $response = $this->withHeader('X-CAS-API-Key', 'test-api-key')
+            ->postJson('/api/simulations/ball-beam', [
+                'reference' => 0.25,
+                'initial_velocity' => 0.75,
+                'initial_acceleration' => 0.5,
+            ]);
+
+        $response->assertStatus(422);
 
         $this->assertDatabaseHas('cas_logs', [
             'command' => 'simulation.ball_beam',
