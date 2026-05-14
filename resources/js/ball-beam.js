@@ -32,7 +32,8 @@ function drawBallBeamFrame(canvas, data, index) {
     const { context, width, height } = prepareCanvas(canvas);
     const ballPosition = data.ball_position[index] ?? 0;
     const beamAngle = data.beam_angle[index] ?? 0;
-    const positionRange = 5;
+    const positionRange = getVisualPositionRange(data);
+    const targetPosition = getTargetPosition(data);
     const beamLength = width * 0.72;
     const pivotX = width / 2;
     const pivotY = height * 0.58;
@@ -46,11 +47,13 @@ function drawBallBeamFrame(canvas, data, index) {
     const endX = pivotX + directionX * beamLength / 2;
     const endY = pivotY + directionY * beamLength / 2;
     const ballRadius = clamp(Math.min(width, height) * 0.038, 11, 22);
-    const normalizedPosition = clamp(ballPosition / positionRange, -1, 1);
-    const alongBeam = normalizedPosition * beamLength * 0.46;
+    const alongBeam = positionToBeamOffset(ballPosition, positionRange, beamLength);
+    const targetAlongBeam = positionToBeamOffset(targetPosition, positionRange, beamLength);
     const contactOffset = beamThickness / 2 + ballRadius - 1;
     const ballX = pivotX + directionX * alongBeam + normalX * contactOffset;
     const ballY = pivotY + directionY * alongBeam + normalY * contactOffset;
+    const targetX = pivotX + directionX * targetAlongBeam;
+    const targetY = pivotY + directionY * targetAlongBeam;
 
     context.clearRect(0, 0, width, height);
     context.fillStyle = '#06100f';
@@ -88,6 +91,33 @@ function drawBallBeamFrame(canvas, data, index) {
     context.lineTo(endX, endY + 18);
     context.stroke();
 
+    context.save();
+    context.strokeStyle = 'rgba(94, 234, 212, 0.85)';
+    context.lineWidth = 2;
+    context.setLineDash([5, 5]);
+    context.beginPath();
+    context.moveTo(
+        targetX + normalX * (beamThickness / 2 + 4),
+        targetY + normalY * (beamThickness / 2 + 4),
+    );
+    context.lineTo(
+        targetX + normalX * (beamThickness / 2 + ballRadius * 2.2),
+        targetY + normalY * (beamThickness / 2 + ballRadius * 2.2),
+    );
+    context.stroke();
+    context.setLineDash([]);
+    context.fillStyle = 'rgba(94, 234, 212, 0.22)';
+    context.beginPath();
+    context.arc(
+        targetX + normalX * (beamThickness / 2 + ballRadius * 2.35),
+        targetY + normalY * (beamThickness / 2 + ballRadius * 2.35),
+        4,
+        0,
+        Math.PI * 2,
+    );
+    context.fill();
+    context.restore();
+
     context.fillStyle = '#052e2b';
     context.strokeStyle = '#5eead4';
     context.lineWidth = 2;
@@ -120,4 +150,26 @@ function drawBallBeamFrame(canvas, data, index) {
 
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
+}
+
+function getVisualPositionRange(data) {
+    const maxObservedPosition = data.ball_position.reduce((maximum, value) => (
+        Number.isFinite(value) ? Math.max(maximum, Math.abs(value)) : maximum
+    ), 0);
+
+    return clamp(maxObservedPosition * 1.1, 0.75, 2);
+}
+
+function getTargetPosition(data) {
+    for (let index = data.ball_position.length - 1; index >= 0; index -= 1) {
+        if (Number.isFinite(data.ball_position[index])) {
+            return data.ball_position[index];
+        }
+    }
+
+    return 0;
+}
+
+function positionToBeamOffset(position, positionRange, beamLength) {
+    return clamp(position / positionRange, -1, 1) * beamLength * 0.46;
 }
