@@ -12,6 +12,6 @@
     </section>
 
     <section class="swagger-panel" aria-label="{{ __('messages.api_docs_heading') }}">
-        <div id="swagger-ui"></div>
+        <div id="swagger-ui" data-openapi-url="{{ route('openapi.public') }}"></div>
     </section>
 @endsection

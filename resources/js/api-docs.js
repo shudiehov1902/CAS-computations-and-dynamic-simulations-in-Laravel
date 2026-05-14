@@ -6,7 +6,7 @@ const swaggerContainer = document.getElementById('swagger-ui');
 if (swaggerContainer) {
     SwaggerUI({
         dom_id: '#swagger-ui',
-        url: '/openapi.json',
+        url: swaggerContainer.dataset.openapiUrl || '/openapi.json',
         deepLinking: true,
         persistAuthorization: true,
         displayRequestDuration: true,

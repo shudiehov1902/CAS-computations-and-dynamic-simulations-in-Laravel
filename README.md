@@ -60,6 +60,60 @@ http://127.0.0.1:8000
 
 The Docker entrypoint installs Composer and npm dependencies, builds frontend assets, generates `APP_KEY` when needed, waits for MariaDB, and runs migrations.
 
+## Node82 Docker Deployment
+
+The university deployment target uses the subpath:
+
+```text
+http://node82.webte.fei.stuba.sk/Zav_zadanie
+```
+
+Use the server-specific compose file when deploying behind the host Nginx reverse proxy:
+
+```bash
+docker compose -f docker-compose.node82.yml up -d --build
+docker compose -f docker-compose.node82.yml exec app php artisan migrate --force
+docker compose -f docker-compose.node82.yml exec app octave --eval "pkg load control; disp('control ok')"
+```
+
+The production `.env` on the server should include:
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://node82.webte.fei.stuba.sk/Zav_zadanie
+ASSET_URL=http://node82.webte.fei.stuba.sk/Zav_zadanie
+
+DB_CONNECTION=mariadb
+DB_HOST=<existing-db-host>
+DB_PORT=3306
+DB_DATABASE=<existing-db-name>
+DB_USERNAME=<existing-db-user>
+DB_PASSWORD=<existing-db-password>
+
+CAS_API_KEY=<strong-secret-key>
+OCTAVE_PATH=octave
+```
+
+If the existing MariaDB server runs on the same host outside Docker, use a host address reachable from containers, for example `DB_HOST=host.docker.internal`, and make sure MariaDB accepts TCP connections from the Docker bridge network.
+
+Host Nginx should proxy the `/Zav_zadanie` prefix to the Docker Nginx container:
+
+```nginx
+location = /Zav_zadanie {
+    return 301 /Zav_zadanie/;
+}
+
+location /Zav_zadanie/ {
+    proxy_pass http://127.0.0.1:8080/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Prefix /Zav_zadanie;
+}
+```
+
 ## Local Setup
 
 ```bash

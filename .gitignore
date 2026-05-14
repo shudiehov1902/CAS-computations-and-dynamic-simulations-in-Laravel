@@ -22,6 +22,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/webte2-api-documentation.pdf
 _ide_helper.php
 Homestead.json
 Homestead.yaml
